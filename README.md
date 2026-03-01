@@ -1,4 +1,4 @@
-# 🚀 QuickHire — Backend API
+# QuickHire — Job Board Platform
 
 RESTful API server for the **QuickHire job board platform**, built with **Node.js**, **Express**, **TypeScript** and **MongoDB (Mongoose)**.
 
@@ -56,7 +56,7 @@ quickhire-server/
 ### ✅ Prerequisites
 
 - Node.js v18 or higher
-- npm
+- npm or yarn
 - MongoDB (local or MongoDB Atlas)
 
 ---
@@ -65,7 +65,7 @@ quickhire-server/
 
 ```bash
 # Clone repository
-git clone <repo-url>
+git clone https://github.com/Sabbir2809/quickhire-server.git
 
 # Navigate to project
 cd quickhire-server
@@ -120,23 +120,6 @@ http://localhost:5000
 
 ---
 
-## ❤️ Health Check
-
-```
-GET /
-```
-
-Response:
-
-```json
-{
-  "success": true,
-  "message": "🚀 QuickHire API is up and running!"
-}
-```
-
----
-
 ## 🌐 Base API URL
 
 ```
@@ -158,185 +141,73 @@ All API responses follow:
 }
 ```
 
----
+## ⚠️ Error Handling
 
-# 📖 API Endpoints
+The API uses a centralized error handling system with consistent error responses:
 
----
+- Validation errors
+- Authentication errors
+- Not found errors
+- Server errors
 
-## 🔑 Authentication
-
-### Register Admin
-
-```
-POST /auth/register
-```
-
-**Body:**
-
-```json
+```ts
 {
-  "email": "admin@quickhire.com",
-  "password": "admin123",
-  "adminSecret": "quickhire_admin"
+  "success": false,
+  "statusCode": 400,
+  "message": "Error message",
+  "error": {
+    "details": "Additional error details"
+  }
 }
 ```
 
 ---
 
-### Login Admin
+## 🔑 API Endpoints
 
-```
-POST /auth/login
-```
+### 1. Auth
 
-**Body:**
+| Method | Endpoint                | Description    |
+| ------ | ----------------------- | -------------- |
+| POST   | `/api/v1/auth/register` | Register admin |
+| POST   | `/api/v1/auth/login`    | Admin login    |
 
-```json
-{
-  "email": "admin@quickhire.com",
-  "password": "admin123"
-}
-```
+### 2. Jobs
 
-Returns JWT token.
+| Method | Endpoint                  | Auth     | Description     |
+| ------ | ------------------------- | -------- | --------------- |
+| GET    | `/api/v1/jobs`            | ❌       | List all jobs   |
+| GET    | `/api/v1/jobs/:id`        | ❌       | Get job details |
+| GET    | `/api/v1/jobs/categories` | ❌       | Get categories  |
+| POST   | `/api/v1/jobs`            | ✅ Admin | Create job      |
+| PATCH  | `/api/v1/jobs/:id`        | ✅ Admin | Update job      |
+| DELETE | `/api/v1/jobs/:id`        | ✅ Admin | Delete job      |
 
-Use token:
+#### Query Parameters (GET /api/v1/jobs)
 
-```
-Authorization: Bearer <token>
-```
+- `search` — Full-text search
+- `category` — Filter by category
+- `location` — Filter by location
+- `type` — Filter by job type
+- `featured` — Show featured only (`true`)
+- `page` — Page number (default: 1)
+- `limit` — Results per page (default: 10)
 
----
+### 3. Applications
 
-## 💼 Jobs
-
-### Get All Jobs
-
-```
-GET /jobs
-```
-
-Supports:
-
-- search
-- category filter
-- location filter
-- job type filter
-- pagination
-
-Example:
-
-```
-/jobs?search=react&page=1&limit=10
-```
+| Method | Endpoint                          | Auth     | Description        |
+| ------ | --------------------------------- | -------- | ------------------ |
+| POST   | `/api/v1/applications`            | ❌       | Submit application |
+| GET    | `/api/v1/applications`            | ✅ Admin | List applications  |
+| GET    | `/api/v1/applications/:id`        | ✅ Admin | Get application    |
+| PATCH  | `/api/v1/applications/:id/status` | ✅ Admin | Update status      |
+| DELETE | `/api/v1/applications/:id`        | ✅ Admin | Delete application |
 
 ---
 
-### Get Single Job
+## 📦 Mongoose Data Models
 
-```
-GET /jobs/:id
-```
-
----
-
-### Get Job Categories
-
-```
-GET /jobs/categories
-```
-
----
-
-### Create Job (Admin)
-
-```
-POST /jobs
-```
-
----
-
-### Update Job (Admin)
-
-```
-PATCH /jobs/:id
-```
-
----
-
-### Delete Job (Admin)
-
-```
-DELETE /jobs/:id
-```
-
----
-
-## 📄 Applications
-
-### Submit Application (Public)
-
-```
-POST /applications
-```
-
-**Body:**
-
-```json
-{
-  "jobId": "job_id",
-  "name": "Applicant Name",
-  "email": "user@email.com",
-  "resumeLink": "https://example.com/resume"
-}
-```
-
----
-
-### Get All Applications (Admin)
-
-```
-GET /applications
-```
-
----
-
-### Get Single Application (Admin)
-
-```
-GET /applications/:id
-```
-
----
-
-### Update Application Status (Admin)
-
-```
-PATCH /applications/:id/status
-```
-
-Status values:
-
-```
-pending | reviewed | accepted | rejected
-```
-
----
-
-### Delete Application (Admin)
-
-```
-DELETE /applications/:id
-```
-
----
-
-# 🧱 Data Models
-
----
-
-## Job Model
+### 1. Job Schema
 
 ```ts
 {
@@ -355,9 +226,7 @@ DELETE /applications/:id
 }
 ```
 
----
-
-## Application Model
+### 2. Application Schema
 
 ```ts
 {
@@ -370,9 +239,7 @@ DELETE /applications/:id
 }
 ```
 
----
-
-## Admin Model
+### 3. Admin Schema
 
 ```ts
 {
@@ -384,7 +251,7 @@ DELETE /applications/:id
 
 ---
 
-# 🔒 Security
+## 🔒 Security
 
 - bcrypt password hashing
 - JWT authentication
@@ -393,17 +260,6 @@ DELETE /applications/:id
 - Request validation
 - Duplicate application prevention
 - CORS protection
-
----
-
-# ⚠️ Error Handling
-
-Centralized error handler provides:
-
-- Validation errors
-- Authentication errors
-- Not found errors
-- Server errors
 
 ---
 
