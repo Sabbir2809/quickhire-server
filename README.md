@@ -172,6 +172,12 @@ The API uses a centralized error handling system with consistent error responses
 | POST   | `/api/v1/auth/register` | Register admin |
 | POST   | `/api/v1/auth/login`    | Admin login    |
 
+### 1. Dashboard
+
+| Method | Endpoint            | Description                         |
+| ------ | ------------------- | ----------------------------------- |
+| GET    | `/api/v1/dashboard` | Retrieve admin dashboard statistics |
+
 ### 2. Jobs
 
 | Method | Endpoint                  | Auth     | Description     |

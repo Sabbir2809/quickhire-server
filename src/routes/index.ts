@@ -1,6 +1,7 @@
 import { Router } from "express";
 import applicationsRoutes from "../modules/applications/applications.routes";
 import authRoutes from "../modules/auth/auth.routes";
+import { dashboardRoutes } from "../modules/dashboard/dashboard.routes";
 import jobsRoutes from "../modules/jobs/jobs.routes";
 
 const router = Router();
@@ -17,6 +18,10 @@ const moduleRoutes = [
   {
     path: "/applications",
     route: applicationsRoutes,
+  },
+  {
+    path: "/dashboard",
+    route: dashboardRoutes,
   },
 ];
 
