@@ -1,5 +1,8 @@
+import z from "zod";
 import { Job } from "../../models/Job.model";
 import { NotFoundError } from "../../utils/appError";
+import { createApplicationSchema } from "../applications/applications.validation";
+import { updateJobSchema } from "./jobs.validation";
 
 const getAllJobs = async (query: any) => {
   const {
@@ -38,12 +41,17 @@ const getJobById = async (id: string) => {
   return job;
 };
 
-const createJob = async (data: any) => {
+const createJob = async (
+  data: z.infer<typeof createApplicationSchema>["body"]
+) => {
   const job = await Job.create(data);
   return job;
 };
 
-const updateJob = async (id: string, data: any) => {
+const updateJob = async (
+  id: string,
+  data: z.infer<typeof updateJobSchema>["body"]
+) => {
   const job = await Job.findByIdAndUpdate(id, data, {
     new: true,
     runValidators: true,

@@ -9,5 +9,5 @@ export const generateJWT = (
 };
 
 export const verifyJWT = (token: string, secret: string) => {
-  return jwt.verify(token, secret) as any;
+  return jwt.verify(token, secret);
 };

@@ -1,8 +1,12 @@
+import z from "zod";
 import { Application } from "../../models/Application.model";
 import { Job } from "../../models/Job.model";
 import { NotFoundError, ValidationError } from "../../utils/appError";
+import { createApplicationSchema } from "./applications.validation";
 
-const createApplication = async (data: any) => {
+const createApplication = async (
+  data: z.infer<typeof createApplicationSchema>["body"]
+) => {
   const job = await Job.findById(data.jobId);
   if (!job) throw new NotFoundError("Job not found!");
 
@@ -17,7 +21,11 @@ const createApplication = async (data: any) => {
   return application;
 };
 
-const getAllApplications = async (query: any) => {
+const getAllApplications = async (query: {
+  jobId?: string;
+  page?: number;
+  limit?: number;
+}) => {
   const { jobId, page = 1, limit = 10 } = query;
   const filter: any = {};
   if (jobId) filter.jobId = jobId;

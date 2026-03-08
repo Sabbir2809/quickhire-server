@@ -10,7 +10,7 @@ const register = catchAsync(async (req: Request, res: Response) => {
     statusCode: 201,
     success: true,
     message: "Admin registered successfully",
-    data: { id: (admin as any)._id, email: admin.email },
+    data: { id: admin._id, email: admin.email },
   });
 });
 
