@@ -10,6 +10,5 @@ export default {
   cors_origin: process.env.CORS_ORIGIN,
   bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
   jwt_access_secret_key: process.env.JWT_ACCESS_SECRET_KEY,
-  jwt_refresh_secret_key: process.env.JWT_REFRESH_SECRET_KEY,
   admin_secret: process.env.ADMIN_SECRET,
 };

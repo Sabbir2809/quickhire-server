@@ -92,7 +92,7 @@ DATABASE_URL=mongodb://localhost:27017/quickhire
 JWT_SECRET=your_secret_key
 JWT_EXPIRES_IN=7d
 CORS_ORIGIN=http://localhost:3000
-ADMIN_SECRET=quickhire_admin
+ADMIN_SECRET=your_admin_secret
 ```
 
 ---
